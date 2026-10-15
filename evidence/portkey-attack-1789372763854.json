@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-09-14T07:59:23.854Z",
+  "portkeyPackage": "@portkey-ai/gateway@1.15.2",
+  "gatewayBase": "http://127.0.0.1:8787",
+  "mockBaseNormal": "http://127.0.0.1:18080",
+  "mockBaseAlt": "http://2130706433:18080",
+  "results": [
+    {
+      "name": "normal_route_rejects_alt_loopback_custom_host",
+      "response": {
+        "status": 200,
+        "body": {
+          "id": "chatcmpl-local-mock",
+          "object": "chat.completion",
+          "created": 1789372763,
+          "model": "local-mock",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "mock ok"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1,
+            "completion_tokens": 1,
+            "total_tokens": 2
+          }
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T07:59:23.780Z",
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "proxy_route_reaches_alt_loopback_custom_host",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T07:59:23.831Z",
+          "method": "POST",
+          "url": "/v1/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "normal_route_rejects_config_custom_host",
+      "response": {
+        "status": 200,
+        "body": {
+          "id": "chatcmpl-local-mock",
+          "object": "chat.completion",
+          "created": 1789372763,
+          "model": "local-mock",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "content": "mock ok"
+              },
+              "finish_reason": "stop"
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1,
+            "completion_tokens": 1,
+            "total_tokens": 2
+          }
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T07:59:23.840Z",
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-config-forwarded",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "proxy_route_uses_config_custom_host_and_key",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T07:59:23.845Z",
+          "method": "POST",
+          "url": "/v1/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-config-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "allowed_custom_host_redirects_to_alt_loopback",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 2,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T07:59:23.850Z",
+          "method": "POST",
+          "url": "/redirect-to-alt",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        },
+        {
+          "at": "2026-09-14T07:59:23.853Z",
+          "method": "GET",
+          "url": "/redirected-from-allowed-host",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node"
+          },
+          "body": ""
+        }
+      ]
+    }
+  ],
+  "gatewayLogs": "\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway...tryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\ntryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\ntryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n"
+}

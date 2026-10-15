@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-10-15T02:26:58.975Z",
+  "results": [
+    {
+      "sizeMb": 80,
+      "baselineRssMb": 66.21484375,
+      "peakRssMb": 388.62890625,
+      "postRequestRssMb": 388.6484375,
+      "amplification": 4.03017578125,
+      "gatewayStatus": 500,
+      "response": "{\"status\":\"failure\",\"message\":\"Something went wrong\"}",
+      "upstreamReceivedBytes": 83886145,
+      "exceededSafetyLimit": false,
+      "maxRssMb": 1536
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-09-14T08:00:07.806Z",
+  "portkeyPackage": "@portkey-ai/gateway@1.15.2",
+  "gatewayBase": "http://127.0.0.1:8787",
+  "mockBaseNormal": "http://127.0.0.1:18080",
+  "mockBaseAlt": "http://2130706433:18080",
+  "results": [
+    {
+      "name": "normal_route_rejects_alt_loopback_custom_host",
+      "response": {
+        "status": 400,
+        "body": {
+          "status": "failure",
+          "message": "Invalid custom host"
+        }
+      },
+      "mockRequestCount": 0,
+      "mockRequests": []
+    },
+    {
+      "name": "proxy_route_reaches_alt_loopback_custom_host",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T08:00:07.779Z",
+          "method": "POST",
+          "url": "/v1/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "normal_route_rejects_config_custom_host",
+      "response": {
+        "status": 400,
+        "body": {
+          "status": "failure",
+          "message": "Invalid config passed",
+          "errors": [
+            "path: , message: Invalid custom host"
+          ]
+        }
+      },
+      "mockRequestCount": 0,
+      "mockRequests": []
+    },
+    {
+      "name": "proxy_route_uses_config_custom_host_and_key",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 1,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T08:00:07.796Z",
+          "method": "POST",
+          "url": "/v1/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-config-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        }
+      ]
+    },
+    {
+      "name": "proxy_redirect_preserves_authorization_after_follow",
+      "response": {
+        "status": 500,
+        "body": {
+          "status": "failure",
+          "message": "Something went wrong"
+        }
+      },
+      "mockRequestCount": 2,
+      "mockRequests": [
+        {
+          "at": "2026-09-14T08:00:07.801Z",
+          "method": "POST",
+          "url": "/redirect-to-alt",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "content-length": "91"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}],\"stream\":false}"
+        },
+        {
+          "at": "2026-09-14T08:00:07.804Z",
+          "method": "GET",
+          "url": "/redirected-from-allowed-host",
+          "headers": {
+            "host": "127.0.0.1:18080",
+            "connection": "keep-alive",
+            "authorization": "Bearer sk-local-client-forwarded",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node"
+          },
+          "body": ""
+        }
+      ]
+    }
+  ],
+  "gatewayLogs": "\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway...\r⠹ Starting AI Gateway...tryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\ntryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\ntryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:443092)\n    at async pu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/build/start-server.js:2:451924)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey/security_lab/package/node_modules/hono/dist/compose.js:22:17)\n"
+}
