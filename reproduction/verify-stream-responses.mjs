@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageDir = path.join(__dirname, "package");
-const gatewayPort = 8787;
+const gatewayPort = 8791;
 const mockPort = 19010;
 const gatewayBase = `http://127.0.0.1:${gatewayPort}`;
 const requests = [];
@@ -19,7 +19,9 @@ function startMock() {
     const body = JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
     if (body.stream === true) {
       res.writeHead(200, { "content-type": "text/event-stream", connection: "keep-alive", "cache-control": "no-cache" });
-      res.write('data: {"type":"response.output_text.delta","delta":"ok"}\n\n');
+      res.write('data: {"type":"response.created","response":{"id":"resp_local","object":"response","status":"in_progress"}}\n\n');
+      res.write('data: {"type":"response.output_text.delta","item_id":"msg_local","output_index":0,"content_index":0,"delta":"ok"}\n\n');
+      res.write('data: {"type":"response.completed","response":{"id":"resp_local","object":"response","status":"completed"}}\n\n');
       res.write('data: [DONE]\n\n');
       res.end();
       return;

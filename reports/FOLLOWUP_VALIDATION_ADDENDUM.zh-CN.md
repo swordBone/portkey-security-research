@@ -34,6 +34,8 @@ api-key: sk-local-provider-url
 
 这说明在 1.15.2 本地构建中，`resourceName` 中的 URL 结构字符可以改变最终连接目标，并导致 provider API key 发往本机控制的目标。该结果与 issue #1596 的描述一致，但本报告将其标记为 **F-8 候选发现**，仍需补充 Vertex、合法值边界和修复版本回归，不把它直接等同于已发布 CVE。
 
+方法学限定：表中的“对照值”是一个失败的正常 provider hostname 连接，不是“允许 host 能到达同一 mock”的正对照。后续应增加独立的允许目标正对照，证明 TLS mock、Gateway 和 provider wiring 均可用后，再完成字段矩阵。
+
 证据文件：
 
 ```text
@@ -57,6 +59,8 @@ api-key: sk-local-provider-url
 | `attempts=5` | 500 | 6 |
 
 每次重试都重新发送完整请求体，并继续携带同一个虚构 Authorization。当前证据确认“配置值会线性放大上游调用次数”，但这本身不等于漏洞：需要继续确认未授权客户端是否能够设置 retry config，以及是否存在配置上限、租户隔离和成本控制。
+
+本轮 Gateway 未配置额外的客户端认证，因而只能证明“在当前开放配置接口下，客户端提交的 retry 配置会生效”；不能据此推断所有部署都允许未授权用户修改 retry 策略。
 
 建议结论：先记录为 **可用性/成本放大候选**，不要直接标记为 SSRF 或认证绕过。
 
@@ -86,7 +90,7 @@ api-key: sk-local-provider-url
 证据文件：
 
 ```text
-../evidence/stream-responses-1792245921685.json
+../evidence/stream-responses-1792246934979.json
 ```
 
 复现脚本：
@@ -147,7 +151,7 @@ SSE 日志样本包含以下结构：
 
 1. F-8 使用本机自签名 HTTPS mock，并通过测试进程环境变量关闭 TLS 校验；这只用于隔离验证。
 2. F-9 的放大测试没有并发运行，也没有连接真实 provider，因此没有测量实际费用。
-3. F-10 的 SSE 是最小格式，尚未覆盖多事件、提前断流、慢速流和客户端重连。
+3. F-10 已补充 `response.created`、`response.output_text.delta`、`response.completed` 和 `[DONE]` 事件，但尚未覆盖提前断流、慢速流和客户端重连。
 4. 三项测试都没有使用此前暴露的真实 API key；所有请求头中的 key 都是虚构值。
 
 ## 下一步回归
