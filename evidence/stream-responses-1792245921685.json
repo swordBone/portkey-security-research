@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-17T14:05:21.685Z",
+  "package": "@portkey-ai/gateway@1.15.2",
+  "results": {
+    "stream_false": {
+      "status": 200,
+      "body": "{\"id\":\"response-local\",\"output\":[{\"type\":\"message\",\"content\":[{\"type\":\"output_text\",\"text\":\"ok\"}]}],\"provider\":\"openai\"}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/responses",
+          "headers": {
+            "host": "127.0.0.1:19010",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-stream",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "60"
+          },
+          "body": "{\"input\":\"local probe\",\"model\":\"gpt-4o-mini\",\"stream\":false}"
+        }
+      ]
+    },
+    "stream_true": {
+      "status": 500,
+      "body": "{\"status\":\"failure\",\"message\":\"Something went wrong\"}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/responses",
+          "headers": {
+            "host": "127.0.0.1:19010",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-stream",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "59"
+          },
+          "body": "{\"input\":\"local probe\",\"model\":\"gpt-4o-mini\",\"stream\":true}"
+        }
+      ]
+    }
+  },
+  "gatewayLogs": "\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway...\r⠹ Starting AI Gateway...tryTargetsRecursively error:  immutable undefined TypeError: immutable\n    at appendHeader (node:internal/deps/undici/undici:8659:15)\n    at _Headers.append (node:internal/deps/undici/undici:8862:16)\n    at ru.updateHeaders (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/build/start-server.js:2:434559)\n    at ru.create (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/build/start-server.js:2:434117)\n    at su (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/build/start-server.js:2:439372)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async iu (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/build/start-server.js:2:443092)\n    at async file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/build/start-server.js:2:456855\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/node_modules/hono/dist/compose.js:22:17)\n    at async dispatch (file:///C:/Users/ASUS/Documents/ChatGPT/portkey-security-research/reproduction/package/node_modules/hono/dist/compose.js:22:17)\n"
+}

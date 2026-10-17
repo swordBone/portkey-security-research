@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-10-17T14:05:00.458Z",
+  "package": "@portkey-ai/gateway@1.15.2",
+  "results": {
+    "control": {
+      "status": 500,
+      "body": "{\"html-message\":\"Message: fetch failed Cause: Error: Client network socket disconnected before secure TLS connection was established Name: TypeError\"}",
+      "requests": []
+    },
+    "fragment_candidate": {
+      "status": 200,
+      "body": "{\"id\":\"url-injection-local\",\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"ok\"}}]}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/",
+          "headers": {
+            "host": "127.0.0.1:18443",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "api-key": "sk-local-provider-url",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "br, gzip, deflate",
+            "content-length": "76"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local probe\"}]}"
+        }
+      ]
+    }
+  },
+  "gatewayLogs": "(node:25472) Warning: Setting the NODE_TLS_REJECT_UNAUTHORIZED environment variable to '0' makes TLS connections and HTTPS requests insecure by disabling certificate verification.\n(Use `node --trace-warnings ...` to show where the warning was created)\n\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway...\r⠹ Starting AI Gateway...\r⠸ Starting AI Gateway...\r⠼ Starting AI Gateway...\r⠴ Starting AI Gateway...\r⠦ Starting AI Gateway...\r⠧ Starting AI Gateway...retryRequest error: Error: Client network socket disconnected before secure TLS connection was established\n    at TLSSocket.onConnectEnd (node:_tls_wrap:1732:19)\n    at TLSSocket.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1698:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {\n  code: 'ECONNRESET',\n  path: undefined,\n  host: '127.0.0.1.openai.azure.com',\n  port: 443,\n  localAddress: null\n} fetch failed\n\r⠇ Starting AI Gateway..."
+}

@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-10-17T14:06:51.340Z",
+  "package": "@portkey-ai/gateway@1.15.2",
+  "results": {
+    "default": {
+      "label": "default",
+      "status": 500,
+      "body": "{\"error\":{\"message\":\"openai error: controlled local failure\",\"type\":null,\"param\":null,\"code\":null},\"provider\":\"openai\"}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "78"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local default\"}]}"
+        }
+      ]
+    },
+    "attempts_3": {
+      "label": "attempts-3",
+      "status": 500,
+      "body": "{\"error\":{\"message\":\"openai error: controlled local failure\",\"type\":null,\"param\":null,\"code\":null},\"provider\":\"openai\"}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-3\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-3\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-3\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-3\"}]}"
+        }
+      ]
+    },
+    "attempts_5": {
+      "label": "attempts-5",
+      "status": 500,
+      "body": "{\"error\":{\"message\":\"openai error: controlled local failure\",\"type\":null,\"param\":null,\"code\":null},\"provider\":\"openai\"}",
+      "requests": [
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        },
+        {
+          "method": "POST",
+          "url": "/chat/completions",
+          "headers": {
+            "host": "127.0.0.1:19020",
+            "connection": "keep-alive",
+            "content-type": "application/json",
+            "authorization": "Bearer sk-local-retry",
+            "accept": "*/*",
+            "accept-language": "*",
+            "sec-fetch-mode": "cors",
+            "user-agent": "node",
+            "accept-encoding": "gzip, deflate",
+            "content-length": "81"
+          },
+          "body": "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"local attempts-5\"}]}"
+        }
+      ]
+    }
+  },
+  "gatewayLogs": "\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway...\r⠹ Starting AI Gateway...\r⠸ Starting AI Gateway...\r⠼ Starting AI Gateway...\r⠴ Starting AI Gateway...\r⠦ Starting AI Gateway...\r⠧ Starting AI Gateway...\r⠇ Starting AI Gateway...\r⠏ Starting AI Gateway...\r⠋ Starting AI Gateway...\r\u001b[1m🚀 Your AI Gateway is running at:\u001b[0m\n   \u001b[1;4;32mhttp://localhost:8787\u001b[0m\n\n\u001b[32m✨ Ready for connections!\u001b[0m\n"
+}
