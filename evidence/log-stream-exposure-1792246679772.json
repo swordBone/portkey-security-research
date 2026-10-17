@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-10-17T14:17:59.773Z",
+  "package": "@portkey-ai/gateway@1.15.2",
+  "logStreamStatus": 200,
+  "requestResponse": {
+    "status": 200,
+    "body": "{\"id\":\"log-stream-local\",\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"ok\"}}]}"
+  },
+  "secretFound": true,
+  "promptMarkerFound": true,
+  "secretOccurrences": 2,
+  "promptOccurrences": 3,
+  "logSample": "event: connected\ndata: 1792246679690\n\nevent: log\ndata: {\"time\":\"2026/10/17 22:17:59\",\"method\":\"POST\",\"status\":200,\"duration\":23,\"requestOptions\":[{\"providerOptions\":{\"provider\":\"openai\",\"apiKey\":\"SECRET-PROBE-LOCAL-ABC123\",\"defaultInputGuardrails\":[],\"defaultOutputGuardrails\":[],\"overrideParams\":{},\"retry\":{\"attempts\":0,\"onStatusCodes\":[]},\"cache\":{},\"requestURL\":\"http://127.0.0.1:19030/chat/completions\",\"rubeusURL\":\"chatComplete\"},\"finalUntransformedRequest\":{\"body\":{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"PROMPT-PROBE-LOCAL-XYZ789\"}]}},\"createdAt\":\"2026-10-17T14:17:59.705Z\",\"lastUsedOptionIndex\":\"config\",\"cacheMode\":\"DISABLED\",\"cacheStatus\":\"DISABLED\",\"hookSpanId\":\"0d37c2f8-de1b-4eea-baf8-efba6cc17c14\",\"executionTime\":18,\"transformedRequest\":{\"body\":{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"PROMPT-PROBE-LOCAL-XYZ789\"}]},\"headers\":{\"content-type\":\"application/json\",\"authorization\":\"Bearer SECRET-PROBE-LOCAL-ABC123\"}},\"requestParams\":{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"PROMPT-PROBE-LOCAL-XYZ789\"}]},\"originalResponse\":{\"body\":{\"id\":\"log-stream-local\",\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"ok\"}}]}},\"response\":{\"id\":\"log-stream-local\",\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"ok\"}}]}}]}\nid: 0\n\n",
+  "gatewayLogs": "\r⠋ Starting AI Gateway...\r⠙ Starting AI Gateway..."
+}

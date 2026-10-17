@@ -88,11 +88,11 @@ x-portkey-config: {"provider":"openai","api_key":"sk-local-config-forwarded","cu
 
 The proxy route accepted a config value that the normal route rejected. The provider key from the config was then converted into an outbound `Authorization` header and sent to the attacker-controlled custom host.
 
-## 策略 3：proxy 目标选择后的重定向与 Authorization 保留
+## 策略 3：proxy 目标选择后的重定向与 Authorization 行为
 
 攻击思路：
 
-很多 SSRF 防护只在第一次选择目标 URL 时做检查，但没有限制后续 HTTP redirect。本地 mock 先返回一个 `302`，把请求跳到 `http://2130706433:18080/redirected-from-allowed-host`，观察 Portkey 是否会跟随跳转，以及跳转后的请求是否继续携带 `Authorization`。
+很多 SSRF 防护只在第一次选择目标 URL 时做检查，但没有限制后续 HTTP redirect。本地 mock 先返回一个 `302`，把请求跳到 `http://2130706433:18080/redirected-from-allowed-host`，观察 Portkey 是否会跟随跳转。由于十进制 loopback 会被 WHATWG URL 规范化为同一回环地址，本用例属于同源跳转；它可以证明可达目标空间扩大和同源 Authorization 保留，不能直接证明跨源 Authorization 也会保留。
 
 攻击请求：
 
@@ -107,15 +107,15 @@ authorization: Bearer sk-local-client-forwarded
 
 - Mock upstream received the initial `POST /redirect-to-alt`.
 - It returned a `302 Location: http://2130706433:18080/redirected-from-allowed-host`.
-- Mock upstream then received the redirected `GET /redirected-from-allowed-host` with the same `authorization: Bearer sk-local-client-forwarded`.
+- Mock upstream then received the redirected `GET /redirected-from-allowed-host` with the same `authorization: Bearer sk-local-client-forwarded`; this is the same-origin normalized loopback case.
 
 中文解读：
 
-mock 收到了两次请求：第一次是 Portkey 访问原始 proxy 目标，第二次是 Portkey 跟随 mock 返回的 `302` 后访问跳转目标。第二次请求仍然带着 `authorization: Bearer sk-local-client-forwarded`，说明如果攻击者能控制一个被允许访问的上游，它可以用跳转把请求带到另一个目标，并让凭据继续随请求流动。
+mock 收到了两次请求：第一次是 Portkey 访问原始 proxy 目标，第二次是 Portkey 跟随 mock 返回的 `302` 后访问跳转目标。第二次请求仍然带着 `authorization: Bearer sk-local-client-forwarded`，但该目标与初始目标属于同源规范化后的回环地址。这个结果说明跳转可以扩大目标空间；跨源跳转的 Authorization 行为必须使用独立目标单独验证。
 
 影响：
 
-Once the proxy path initiates the fetch, redirects are followed and the authorization header is preserved across the local redirect in this test. That widens the practical SSRF surface if an allowed or reachable host can redirect to a sensitive target.
+Once the proxy path initiates the fetch, redirects are followed and the authorization header is preserved across the same-origin local redirect in this test. That widens the practical SSRF surface if an allowed or reachable host can redirect to a sensitive target; cross-origin header behavior is a separate test condition.
 
 ## 本地证据
 

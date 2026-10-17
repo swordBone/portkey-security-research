@@ -95,6 +95,54 @@ api-key: sk-local-provider-url
 ../reproduction/verify-stream-responses.mjs
 ```
 
+## F-6：未认证 `/log/stream` 日志泄露
+
+这是独立于 SSRF 的高优先级发现。准确的 `@portkey-ai/gateway@1.15.2`/`ca771294` 构建在默认开发模式下注册 `/log/stream`，该路由没有 admin authentication middleware。
+
+本地验证使用无凭证 `GET /log/stream`，随后向本机 mock 发出带虚构 provider key 和提示词标记的请求。结果如下：
+
+| 项目 | 结果 |
+|---|---|
+| `/log/stream` 状态 | `200` |
+| provider key 是否出现 | 是，`2` 次 |
+| 提示词标记是否出现 | 是，`3` 次 |
+| 日志中可见内容 | `providerOptions.apiKey`、`requestURL`、原始提示词、转换后的 Authorization |
+
+SSE 日志样本包含以下结构：
+
+```json
+{
+  "providerOptions": {
+    "provider": "openai",
+    "apiKey": "SECRET-PROBE-LOCAL-ABC123",
+    "requestURL": "http://127.0.0.1:19030/chat/completions"
+  },
+  "finalUntransformedRequest": {
+    "body": {
+      "messages": [{"role": "user", "content": "PROMPT-PROBE-LOCAL-XYZ789"}]
+    }
+  }
+}
+```
+
+该结果说明：只要攻击者能够访问本地开发模式 Gateway 的日志流，就可以被动读取调用者 provider key、请求 URL 和提示词原文，不需要构造 SSRF payload。该问题应与 F-1 分开评级和披露。
+
+版本边界：GitHub release 显示 `v1.15.2` 对应提交 `ca77129`；后续 PR #1657 在 `/log/stream` 加入 admin authentication，并对 provider options 和 headers 做脱敏。因此这是 1.15.2 的版本缺口/backport gap，不能把当前 `main` 的修复状态倒推到 1.15.2。
+
+来源：[v1.15.2 start-server.ts](https://github.com/Portkey-AI/gateway/blob/ca771294/src/start-server.ts)、[PR #1657](https://github.com/Portkey-AI/gateway/pull/1657)。
+
+证据文件：
+
+```text
+../evidence/log-stream-exposure-1792246679772.json
+```
+
+复现脚本：
+
+```text
+../reproduction/verify-log-stream-exposure.mjs
+```
+
 ## 本轮限制
 
 1. F-8 使用本机自签名 HTTPS mock，并通过测试进程环境变量关闭 TLS 校验；这只用于隔离验证。
