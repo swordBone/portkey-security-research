@@ -4,11 +4,11 @@
 
 **测试边界：** 仅使用本机 Gateway、本机 mock upstream、虚构凭据和受控请求量；不连接真实 provider、云 metadata、外部攻击者服务器或真实 API Key。
 
-本文档用于扩展现有 CVE-2026-82270 复现，不把公开 issue 中的线索直接当作已确认漏洞。每个方向都需要单独记录版本、配置、请求、上游收到的内容和 Gateway 日志。
+本文档用于扩展现有 CVE-2026-82270 复现，并吸收第二轮独立复核结果。公开 issue、独立复核和本仓库本机实验仍需分开标注；每个方向都需要单独记录版本、配置、请求、上游收到的内容和 Gateway 日志。
 
 ## 优先级一：provider URL 组件注入
 
-Portkey issue #1596 报告了 Azure OpenAI 的 `resourceName`、Vertex AI 的 `vertexRegion`，以及 Vertex 的 `vertexProjectId` 在构造 URL 前缺少严格校验。公开 issue 给出的现象是，值中加入 URL 结构字符后，Gateway 可能请求错误的主机，并把 provider API key 一起发出。该 issue 目前应视为待验证线索，而不是本仓库已经确认的 CVE。
+Portkey issue #1596 报告了 Azure OpenAI 的 `resourceName`、Vertex AI 的 `vertexRegion`，以及 Vertex 的 `vertexProjectId` 在构造 URL 前缺少严格校验。独立第二轮复核已经报告 Azure 内网目标和 Vertex loopback mock 均可达，因此该方向应写成 **provider URL 注入型 SSRF 发现**。测试所用 key 是攻击者提交的虚构值，不能写成真实 provider key 泄露；精确 tag、正对照和修复版本仍需回归。
 
 本地验证设计：
 
@@ -18,7 +18,7 @@ Portkey issue #1596 报告了 Azure OpenAI 的 `resourceName`、Vertex AI 的 `v
 4. 对比合法值、被拒绝值和包含 `#`、`?`、`/`、`@` 的值；
 5. 只记录“是否连接到错误主机、请求路径和是否带测试认证头”，不访问真实云服务。
 
-判定标准：provider 字段应只能生成预期的固定域名和路径；若 mock 收到请求，且请求目标偏离 provider 预期域名，应单独建立候选发现 F-8。
+判定标准：provider 字段应只能生成预期的固定域名和路径；若 mock 收到请求，且请求目标偏离 provider 预期域名，应记录为 F-8。CVE-2026-82270 涉及的 proxy 入口与 F-8 provider 入口共同说明：Gateway 的 SSRF 防护存在多个入口、校验覆盖不一致的问题，报告中应按“同一结构性根因的不同入口”归纳，但不要混淆漏洞编号。
 
 来源：[Portkey issue #1596](https://github.com/Portkey-AI/gateway/issues/1596)。
 
@@ -33,7 +33,7 @@ Gateway 文档公开支持自动重试和 fallback。安全关注点不是功能
 - 设置两个 mock provider，观察 fallback 是否把第一个 provider 的认证头带到第二个 provider；
 - 使用固定小请求和总请求上限，禁止无限等待或高并发。
 
-判定标准：配置应有上限、超限应被拒绝；不同 provider 之间不应复用错误的 Authorization、Cookie 或 provider-specific header。若存在放大，应记录为可用性/成本风险，不能直接称为远程代码执行。
+判定标准：配置应有上限、超限应被拒绝；客户端断开后不应继续无界重试；不同 provider 之间不应复用错误的 Authorization、Cookie 或 provider-specific header。第二轮复核已报告 `attempts` 无 schema 上限、死代码 `MAX_RETRIES` 未接线，以及客户端断开后仍继续重试。当前应定性为慢速资源/成本放大，不能直接称为远程代码执行或突发洪泛。
 
 ## 优先级一：流式响应错误导致的连接或重试放大
 
@@ -111,9 +111,9 @@ Gateway 暴露 `/v1/realtime`。测试重点是认证链是否与普通 `/v1/*` 
 
 | 编号 | 方向 | 当前证据等级 |
 |---|---|---|
-| F-8 | Azure/Vertex provider URL 组件注入 | 公开 issue 线索，待本地验证 |
-| F-9 | Retry/fallback 请求与凭据隔离 | 功能面候选，待本地验证 |
-| F-10 | 流式响应异常导致连接/重试放大 | 公开 issue 线索，待本地验证 |
+| F-8 | Azure/Vertex provider URL 组件注入 | 本机 Azure 已验证；独立复核确认 Azure 内网目标与 Vertex，精确版本回归待补 |
+| F-9 | Retry/fallback 请求与凭据隔离 | 本机线性放大已验证；独立复核确认无上限和断开后继续重试，部署边界待补 |
+| F-10 | 流式响应异常导致连接/重试放大 | 本机复现 `TypeError: immutable`，根因定位到 `responseService.updateHeaders` |
 | F-11 | 开发控制台和日志敏感信息暴露 | 当前版本和运行模式相关，待验证 |
 | F-12 | DNS/IP 规范化与钉扎缺失的扩展矩阵 | F-5 的扩展验证 |
 | F-13 | 路径、查询和编码边界 | F-1 的扩展验证 |

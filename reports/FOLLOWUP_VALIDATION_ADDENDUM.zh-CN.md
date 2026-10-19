@@ -7,7 +7,7 @@
 
 本附录记录对后续候选方向的第一次动态验证。结果只适用于当前本地构建和测试配置，不代表真实 provider、云 metadata 或生产网络已经受到影响。
 
-## F-8：Azure provider URL 组件注入候选
+## F-8：Azure/Vertex provider URL 组件注入（已由独立复核升级）
 
 公开 issue #1596 描述 Azure `resourceName` 在拼接 URL 前缺少严格验证。为避免访问外部服务，本次启动了本机 HTTPS mock，并将 TLS 校验仅在测试进程内关闭。
 
@@ -32,9 +32,16 @@ host: 127.0.0.1:18443
 api-key: sk-local-provider-url
 ```
 
-这说明在 1.15.2 本地构建中，`resourceName` 中的 URL 结构字符可以改变最终连接目标，并导致 provider API key 发往本机控制的目标。该结果与 issue #1596 的描述一致，但本报告将其标记为 **F-8 候选发现**，仍需补充 Vertex、合法值边界和修复版本回归，不把它直接等同于已发布 CVE。
+这说明在 1.15.2 本地构建中，`resourceName` 中的 URL 结构字符可以改变最终连接目标。这里使用的 API key 是测试者自己提交的虚构值，因此结论应写成 **SSRF/错误目标出站请求**，不能写成“泄露了真实 provider key”。在真实部署中，风险取决于 Gateway 所使用的 provider 配置、网络可达性和出站认证方式。
 
-方法学限定：表中的“对照值”是一个失败的正常 provider hostname 连接，不是“允许 host 能到达同一 mock”的正对照。后续应增加独立的允许目标正对照，证明 TLS mock、Gateway 和 provider wiring 均可用后，再完成字段矩阵。
+第二轮独立复核进一步报告了两项结果：
+
+- `resourceName=172.26.3.45:18443#` 在带有常规 `requestValidator` 的路由上仍可到达受控内网 mock，说明该路径不依赖 deprecated proxy 路由；
+- `vertexRegion=127.0.0.1:18443#` 也可到达同一 mock，并携带测试用 Bearer token。
+
+这两项结果应作为“独立复核证据”引用，不能冒充本附录中的本机原始测量。Vertex 结果使 F-8 从单一 Azure 候选升级为 **Azure/Vertex provider URL 注入型 SSRF 发现**；仍需在精确 tag、修复提交和合法值正对照上做回归。该发现不自动等同于 CVE-2026-82270，后者针对 `/v1/proxy/*` 校验链缺失。
+
+方法学限定：表中的“对照值”是一个失败的正常 provider hostname 连接，不是“允许 host 能到达同一 mock”的正对照。后续应增加独立的允许目标正对照，证明 TLS mock、Gateway 和 provider wiring 均可用后，再完成字段矩阵。独立复核中的 `172.26.3.45` 和 Vertex 结果还需要保存原始请求日志、提交/tag 和启动参数，才能作为本仓库的可审计附件。
 
 证据文件：
 
@@ -48,7 +55,7 @@ api-key: sk-local-provider-url
 ../reproduction/verify-provider-url-injection.mjs
 ```
 
-## F-9：Retry 请求放大
+## F-9：Retry 请求放大与客户端断开后的后台重试
 
 本地 mock 对每次请求返回 `500`，Gateway 使用 `x-portkey-config` 设置 retry。结果如下：
 
@@ -58,11 +65,13 @@ api-key: sk-local-provider-url
 | `attempts=3` | 500 | 4 |
 | `attempts=5` | 500 | 6 |
 
-每次重试都重新发送完整请求体，并继续携带同一个虚构 Authorization。当前证据确认“配置值会线性放大上游调用次数”，但这本身不等于漏洞：需要继续确认未授权客户端是否能够设置 retry config，以及是否存在配置上限、租户隔离和成本控制。
+每次重试都重新发送完整请求体，并继续携带同一个虚构 Authorization。当前本地证据确认“配置值会线性放大上游调用次数”，但这本身不等于所有部署都存在未授权漏洞。第二轮独立复核补充了两个实现事实：retry schema 的 `attempts` 没有 `.max()` 上限；源码中定义的 `MAX_RETRIES = 5` 未接入实际执行路径。复核还观察到客户端用 `curl -m 3` 主动断开后，Gateway 仍在约 4.4 秒间隔继续重试（0 秒累计 2 次、5 秒累计 4 次、20 秒累计 5 次）。
+
+因此 F-9 可从“待验证候选”升级为 **已验证的慢速资源/上游成本放大行为**，但影响应有边界：它不是突发高并发洪泛；在 `attempts=20` 的观察窗口内约 90 秒完成 8 次请求。是否构成未授权 DoS 或真实费用损失，仍取决于部署是否开放请求级 config、上游计费与租户隔离。
 
 本轮 Gateway 未配置额外的客户端认证，因而只能证明“在当前开放配置接口下，客户端提交的 retry 配置会生效”；不能据此推断所有部署都允许未授权用户修改 retry 策略。
 
-建议结论：先记录为 **可用性/成本放大候选**，不要直接标记为 SSRF 或认证绕过。
+建议结论：记录为 **可用性/成本放大缺陷**，不要标记为 SSRF 或认证绕过。发布前应补充独立复核的原始计时日志，并在精确版本上确认 `MAX_RETRIES` 的来源位置。
 
 证据文件：
 
@@ -85,7 +94,7 @@ api-key: sk-local-provider-url
 | `stream=false` | 200 | 1 | 正常返回 response JSON |
 | `stream=true` | 500 | 1 | `TypeError: immutable`，发生在 `responseService.updateHeaders` |
 
-该结果与公开 issue #1550 的描述一致。当前测试证明的是流式响应处理失败和潜在重试/连接影响；没有证明远程代码执行、凭据泄露或跨租户数据读取。
+该结果与公开 issue #1550 的描述一致。当前测试证明的是流式响应处理失败和潜在重试/连接影响；没有证明远程代码执行、凭据泄露或跨租户数据读取。源码/构建日志中的根因是 `responseService.updateHeaders` 尝试修改不可变 Headers，触发 `TypeError: immutable`；应将其作为实现根因记录，而不是只保留异常字符串。
 
 证据文件：
 
@@ -156,8 +165,8 @@ SSE 日志样本包含以下结构：
 
 ## 下一步回归
 
-- F-8：补充 Vertex `vertexRegion`、`vertexProjectId` 和 URL 编码字符矩阵；
-- F-9：确认普通客户端是否能控制 retry/fallback 配置，并加入上限测试；
+- F-8：在精确 tag 上复核 Azure 内网目标、Vertex `vertexRegion`、`vertexProjectId` 和 URL 编码字符矩阵，并补齐允许目标正对照；
+- F-9：确认普通客户端是否能控制 retry/fallback 配置，补充断开后重试的原始时间线、租户边界和修复后的上限测试；
 - F-10：增加提前断流、慢速 SSE、多个客户端连接和修复版本对照；
 - 获取维护者修复版本后，使用相同脚本进行前后对比。
 
